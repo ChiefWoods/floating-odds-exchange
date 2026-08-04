@@ -1,0 +1,23 @@
+{
+  "name": "floating-odds-exchange",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check-types": "tsc --noEmit",
+    "test": "vitest run",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "@blueshift-gg/quasar-svm": "^0.1.12",
+    "@solana/codecs": "^6.0.0",
+    "@solana/kit": "^6.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.3.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.1"
+  }
+}
