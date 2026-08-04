@@ -5,6 +5,10 @@
   "type": "module",
   "scripts": {
     "check-types": "tsc --noEmit",
+    "lint": "oxlint --fix",
+    "lint:check": "oxlint",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check",
     "test": "vitest run",
     "prepare": "husky"
   },
@@ -17,6 +21,8 @@
     "@types/node": "^22.13.0",
     "husky": "^9.1.7",
     "lint-staged": "^17.3.0",
+    "oxfmt": "^0.62.0",
+    "oxlint": "^1.77.0",
     "typescript": "^5.9.3",
     "vitest": "^4.1.1"
   }
