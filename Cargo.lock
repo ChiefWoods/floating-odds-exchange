@@ -460,8 +460,9 @@ dependencies = [
 
 [[package]]
 name = "brine-fp"
-version = "0.3.0"
-source = "git+https://github.com/ChiefWoods/brine-fp?branch=fix%2Fstatic#55082024d4dc5c15e6f68465408bc6b2e335cee6"
+version = "0.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1cabd459af1e4e9c9f61a0202fb32cc3bf74d5c5f59fa0c355fe2449251ccb9f"
 dependencies = [
  "uint",
 ]
@@ -2283,9 +2284,9 @@ dependencies = [
 
 [[package]]
 name = "solana-math"
-version = "0.2.1"
+version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ab4ffe9fa114d24a784df51f84f088f6840e8ad8cb0ec46fccdc277a65eee72e"
+checksum = "fbac134ca41a69aed08e517584a75ce1c209d3717bd9f787ceedba2d98728fed"
 dependencies = [
  "basis-points",
  "brine-fp",

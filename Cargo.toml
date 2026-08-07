@@ -20,19 +20,15 @@ idl-build = ["quasar-lang/idl-build"]
 
 [dependencies]
 basis-points = { version = "0.4.1", features = ["quasar"] }
-brine-fp = { git = "https://github.com/ChiefWoods/brine-fp", branch = "fix/static", default-features = false }
+brine-fp = { version = "0.3.1", default-features = false }
 quasar-lang = { git = "https://github.com/blueshift-gg/quasar", branch = "master" }
 quasar-spl = { git = "https://github.com/blueshift-gg/quasar", branch = "master" }
 quasar-metadata = { git = "https://github.com/blueshift-gg/quasar", branch = "master" }
 solana-instruction = { version = "3.2.0" }
-solana-math = { version = "0.2.1", features = ["basis-points", "brine-fp", "quasar"] }
+solana-math = { version = "0.2.2", features = ["basis-points", "brine-fp", "quasar"] }
 # quasar-lang asks for zeropod ^0.3.3 → 0.3.4 pulls wincode 0.5 vs quasar's 0.4.
 # Pin version only — do not enable `wincode` here or SBF builds get duplicate panic_impl.
 zeropod = "=0.3.3"
-
-[patch.crates-io]
-# Unify solana-math's brine-fp with the sbpf-safe fork (const ONE/ZERO/TWO_PREC).
-brine-fp = { git = "https://github.com/ChiefWoods/brine-fp", branch = "fix/static" }
 
 [dev-dependencies]
 floating_odds_exchange-client = { path = "target/client/rust/floating_odds_exchange-client" }
