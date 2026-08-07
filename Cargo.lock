@@ -895,7 +895,7 @@ dependencies = [
  "solana-address 2.2.0",
  "solana-instruction",
  "solana-math",
- "solana-pubkey 4.2.0",
+ "solana-program-pack",
  "wincode",
  "zeropod",
 ]

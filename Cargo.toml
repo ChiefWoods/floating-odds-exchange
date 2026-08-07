@@ -38,7 +38,7 @@ brine-fp = { git = "https://github.com/ChiefWoods/brine-fp", branch = "fix/stati
 floating_odds_exchange-client = { path = "target/client/rust/floating_odds_exchange-client" }
 quasar-svm = { version = "0.1" }
 solana-account = { version = "3.4.0" }
-solana-address = { version = "2.2.0", features = ["decode"] }
+solana-address = { version = "2.2.0", features = ["curve25519", "decode"] }
 solana-instruction = { version = "3.2.0", features = ["bincode"] }
-solana-pubkey = { version = "4.1.0" }
+solana-program-pack = "3.1.0"
 wincode = { version = "=0.4.9", features = ["derive"] }
