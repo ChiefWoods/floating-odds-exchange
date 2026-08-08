@@ -4,6 +4,12 @@ Bonding-curve based floating odds prediction market, inspired by [FoX](https://g
 
 [Source Repository](https://github.com/ChiefWoods/floating-odds-exchange)
 
+## How It Works
+
+An authority initializes a binary YES/NO market, then launches it with seed liquidity so trading can begin. Traders buy bets on one side at a time: price follows a supply-ratio bonding curve (the scarcer side costs more), payment goes into the market pot, and the buyer receives tokens for the chosen outcome. Exact-in and exact-out buys both use that curve, with a slippage bound on the other leg. The authority can pause new buys without blocking claims.
+
+When the event settles, the authority resolves the market to YES, NO, or a void refund. On YES/NO, a protocol fee is taken from the pot; holders of the winning side then claim their share of the remaining pot. If the market is refunded, both sides claim pro-rata from the pot with no fee.
+
 ## Built With
 
 ### Languages
