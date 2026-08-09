@@ -2,6 +2,7 @@
 //! lifecycle suite and the Quasar vault guide.
 
 use super::*;
+use floating_odds_exchange_math::{quote_exact_input, quote_exact_output};
 
 #[test]
 fn initialize_creates_market_and_outcome_mints() {
@@ -75,6 +76,13 @@ fn buy_exact_out_mints_yes_against_slippage_cap() {
     let accounts = do_launched_with_buyer(&mut svm, &pdas);
 
     let out_amount = 10_000u64;
+    let quoted_cost = quote_exact_output(
+        SIDE_LIQUIDITY,
+        SIDE_LIQUIDITY,
+        out_amount,
+        10u64.pow(POT_DECIMALS.into()),
+    )
+    .unwrap();
     let result = svm.process_instruction(
         &buy_ix(&pdas, true, 0, out_amount, false, u64::MAX),
         &accounts,
@@ -83,13 +91,13 @@ fn buy_exact_out_mints_yes_against_slippage_cap() {
 
     let buyer_y = result.account(&pdas.buyer_y_ata).unwrap();
     assert_eq!(token_amount(buyer_y), out_amount);
-    assert!(
-        token_amount(result.account(&pdas.pot).unwrap()) > POT_LIQUIDITY,
-        "pot should grow by the quoted cost"
+    assert_eq!(
+        token_amount(result.account(&pdas.pot).unwrap()),
+        POT_LIQUIDITY + quoted_cost,
     );
-    assert!(
-        token_amount(result.account(&pdas.buyer_pot_ata).unwrap()) < BUYER_POT_BALANCE,
-        "buyer pot balance should decrease"
+    assert_eq!(
+        token_amount(result.account(&pdas.buyer_pot_ata).unwrap()),
+        BUYER_POT_BALANCE - quoted_cost,
     );
 }
 
@@ -100,21 +108,25 @@ fn buy_exact_in_mints_no_with_minimum_out() {
     let accounts = do_launched_with_buyer(&mut svm, &pdas);
 
     let in_amount = 5_000_000u64;
+    let (quoted_out, actual_cost) = quote_exact_input(
+        SIDE_LIQUIDITY,
+        SIDE_LIQUIDITY,
+        in_amount,
+        10u64.pow(POT_DECIMALS.into()),
+    )
+    .unwrap();
     let result = svm.process_instruction(&buy_ix(&pdas, false, in_amount, 0, true, 1), &accounts);
     result.assert_success();
 
     let buyer_n = result.account(&pdas.buyer_n_ata).unwrap();
-    assert!(
-        token_amount(buyer_n) >= 1,
-        "exact-in should mint at least 1 NO"
+    assert_eq!(token_amount(buyer_n), quoted_out);
+    assert_eq!(
+        token_amount(result.account(&pdas.pot).unwrap()),
+        POT_LIQUIDITY + actual_cost,
     );
-    assert!(
-        token_amount(result.account(&pdas.pot).unwrap()) > POT_LIQUIDITY,
-        "pot should grow by the quoted cost"
-    );
-    assert!(
-        token_amount(result.account(&pdas.buyer_pot_ata).unwrap()) < BUYER_POT_BALANCE,
-        "buyer pot balance should decrease"
+    assert_eq!(
+        token_amount(result.account(&pdas.buyer_pot_ata).unwrap()),
+        BUYER_POT_BALANCE - actual_cost,
     );
 }
 

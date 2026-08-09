@@ -1,0 +1,9 @@
+[package]
+name = "floating-odds-exchange-math"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+basis-points.workspace = true
+brine-fp.workspace = true
+solana-math = { workspace = true, features = ["basis-points", "brine-fp"] }

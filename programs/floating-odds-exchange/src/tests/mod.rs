@@ -23,7 +23,7 @@ use {
     },
     solana_address::Address,
     solana_program_pack::Pack,
-    std::vec::Vec,
+    std::{path::Path, vec::Vec},
 };
 
 // Deterministic keys — avoid Address::new_unique() (order-dependent across tests).
@@ -42,8 +42,10 @@ const AUTHORITY_LAMPORTS: u64 = 100_000_000_000;
 const BUYER_POT_BALANCE: u64 = 10_000_000_000_000;
 
 fn setup() -> QuasarSvm {
-    let elf = std::fs::read("target/deploy/floating_odds_exchange.so").unwrap();
-    let mpl = std::fs::read("src/tests/fixtures/mpl_token_metadata.so")
+    let manifest_dir = Path::new(env!("CARGO_MANIFEST_DIR"));
+    let elf =
+        std::fs::read(manifest_dir.join("../../target/deploy/floating_odds_exchange.so")).unwrap();
+    let mpl = std::fs::read(manifest_dir.join("src/tests/fixtures/mpl_token_metadata.so"))
         .expect("missing src/tests/fixtures/mpl_token_metadata.so");
     QuasarSvm::new()
         .with_program(&program_id(), &elf)

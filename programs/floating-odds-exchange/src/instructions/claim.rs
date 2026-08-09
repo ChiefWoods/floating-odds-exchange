@@ -1,3 +1,4 @@
+use floating_odds_exchange_math::claims_from_pot;
 use quasar_lang::{cpi::Seed, prelude::*, sysvars::Sysvar};
 use quasar_spl::prelude::*;
 use solana_math::SafeMath;
@@ -5,7 +6,6 @@ use solana_math::SafeMath;
 use crate::{
     errors::FloatingOddsExchangeError,
     events::WinningsClaimed,
-    math::claims_from_pot,
     state::{Market, MintN, MintY, Outcome},
     EventAuthority, FloatingOddsExchange,
 };
@@ -92,14 +92,16 @@ impl Claim {
                     .claimer_mint_y_token_account
                     .as_ref()
                     .ok_or(FloatingOddsExchangeError::TokenAccountNotInitialized)?;
-                claims_from_pot(token_account.amount(), self.mint_y.supply(), pot_amount)?
+                claims_from_pot(token_account.amount(), self.mint_y.supply(), pot_amount)
+                    .map_err(FloatingOddsExchangeError::from)?
             }
             Outcome::No => {
                 let token_account = self
                     .claimer_mint_n_token_account
                     .as_ref()
                     .ok_or(FloatingOddsExchangeError::TokenAccountNotInitialized)?;
-                claims_from_pot(token_account.amount(), self.mint_n.supply(), pot_amount)?
+                claims_from_pot(token_account.amount(), self.mint_n.supply(), pot_amount)
+                    .map_err(FloatingOddsExchangeError::from)?
             }
             Outcome::Refunded => {
                 let amount_y = Self::token_amount(self.claimer_mint_y_token_account.as_ref());
@@ -109,7 +111,8 @@ impl Claim {
                     amount_y.safe_add(amount_n)?,
                     self.mint_y.supply().safe_add(self.mint_n.supply())?,
                     pot_amount,
-                )?
+                )
+                .map_err(FloatingOddsExchangeError::from)?
             }
             Outcome::Undecided => return Err(FloatingOddsExchangeError::MarketNotResolved.into()),
         };

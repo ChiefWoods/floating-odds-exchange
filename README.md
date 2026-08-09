@@ -37,6 +37,7 @@ git clone https://github.com/ChiefWoods/floating-odds-exchange.git
 2. Resync your program id
 
 ```sh
+cd programs/floating-odds-exchange
 quasar keys sync
 ```
 

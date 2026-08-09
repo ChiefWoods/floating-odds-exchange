@@ -1,3 +1,4 @@
+use floating_odds_exchange_math::MathError;
 use quasar_lang::prelude::*;
 
 #[error_code]
@@ -38,4 +39,42 @@ pub enum FloatingOddsExchangeError {
     InvalidUtf8String,
     /// Arithmetic overflow
     ArithmeticOverflow,
+}
+
+impl From<MathError> for FloatingOddsExchangeError {
+    fn from(error: MathError) -> Self {
+        match error {
+            MathError::InvalidAmount => Self::InvalidAmount,
+            MathError::InsufficientLiquidity => Self::InsufficientLiquidity,
+            MathError::ArithmeticOverflow => Self::ArithmeticOverflow,
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn maps_math_errors_to_program_errors() {
+        for (math_error, program_error) in [
+            (
+                MathError::InvalidAmount,
+                FloatingOddsExchangeError::InvalidAmount,
+            ),
+            (
+                MathError::InsufficientLiquidity,
+                FloatingOddsExchangeError::InsufficientLiquidity,
+            ),
+            (
+                MathError::ArithmeticOverflow,
+                FloatingOddsExchangeError::ArithmeticOverflow,
+            ),
+        ] {
+            assert_eq!(
+                FloatingOddsExchangeError::from(math_error) as u32,
+                program_error as u32
+            );
+        }
+    }
 }

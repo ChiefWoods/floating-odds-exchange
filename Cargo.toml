@@ -1,40 +1,15 @@
-[package]
-name = "floating-odds-exchange"
-version = "0.1.0"
-edition = "2021"
-
-[lints.rust.unexpected_cfgs]
-level = "warn"
-check-cfg = [
-    'cfg(target_os, values("solana"))',
+[workspace]
+members = [
+    "crates/floating-odds-exchange-math",
+    "programs/floating-odds-exchange",
 ]
+resolver = "2"
 
-[lib]
-crate-type = ["cdylib"]
+[workspace.package]
+edition = "2021"
+version = "0.1.0"
 
-[features]
-alloc = []
-client = []
-debug = []
-idl-build = ["quasar-lang/idl-build"]
-
-[dependencies]
-basis-points = { version = "0.4.1", features = ["quasar"] }
+[workspace.dependencies]
+basis-points = { version = "0.4.1", default-features = false }
 brine-fp = { version = "0.3.1", default-features = false }
-quasar-lang = { git = "https://github.com/blueshift-gg/quasar", branch = "master" }
-quasar-spl = { git = "https://github.com/blueshift-gg/quasar", branch = "master" }
-quasar-metadata = { git = "https://github.com/blueshift-gg/quasar", branch = "master" }
-solana-instruction = { version = "3.2.0" }
-solana-math = { version = "0.2.2", features = ["basis-points", "brine-fp", "quasar"] }
-# quasar-lang asks for zeropod ^0.3.3 → 0.3.4 pulls wincode 0.5 vs quasar's 0.4.
-# Pin version only — do not enable `wincode` here or SBF builds get duplicate panic_impl.
-zeropod = "=0.3.3"
-
-[dev-dependencies]
-floating_odds_exchange-client = { path = "target/client/rust/floating_odds_exchange-client" }
-quasar-svm = { version = "0.1" }
-solana-account = { version = "3.4.0" }
-solana-address = { version = "2.2.0", features = ["curve25519", "decode"] }
-solana-instruction = { version = "3.2.0", features = ["bincode"] }
-solana-program-pack = "3.1.0"
-wincode = { version = "=0.4.9", features = ["derive"] }
+solana-math = { version = "0.2.2" }

@@ -1,9 +1,27 @@
-use basis_points::BasisPoints;
-use brine_fp::UnsignedNumeric;
-use quasar_lang::prelude::ProgramError;
-use solana_math::{SafeConvert, SafeMath};
+#![no_std]
 
-use crate::errors::FloatingOddsExchangeError;
+use basis_points::{error::BasisPointsError, BasisPoints};
+use brine_fp::UnsignedNumeric;
+use solana_math::{SafeConvert, SafeMath, SafeMathError};
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum MathError {
+    InvalidAmount,
+    InsufficientLiquidity,
+    ArithmeticOverflow,
+}
+
+impl From<BasisPointsError> for MathError {
+    fn from(_: BasisPointsError) -> Self {
+        Self::ArithmeticOverflow
+    }
+}
+
+impl From<SafeMathError> for MathError {
+    fn from(_: SafeMathError) -> Self {
+        Self::ArithmeticOverflow
+    }
+}
 
 /// `supply_buy` / `supply_other` are mint supplies of the purchased and
 /// opposite outcomes.
@@ -29,9 +47,9 @@ pub fn quote_exact_output(
     supply_other: u64,
     amount: u64,
     precision: u64,
-) -> Result<u64, ProgramError> {
+) -> Result<u64, MathError> {
     if amount == 0 {
-        return Err(FloatingOddsExchangeError::InvalidAmount.into());
+        return Err(MathError::InvalidAmount);
     }
 
     let amount_u = amount as u128;
@@ -47,17 +65,15 @@ pub fn quote_exact_output(
     let total_before = supply_buy_u.safe_add(supply_other_u)?;
 
     if total_before == 0 {
-        return Err(FloatingOddsExchangeError::InsufficientLiquidity.into());
+        return Err(MathError::InsufficientLiquidity);
     }
 
     let total_after = total_before.safe_add(amount_u)?;
 
     let ratio = UnsignedNumeric::new(total_after).safe_div(UnsignedNumeric::new(total_before))?;
-    let ln = ratio
-        .log()
-        .ok_or(FloatingOddsExchangeError::ArithmeticOverflow)?;
+    let ln = ratio.log().ok_or(MathError::ArithmeticOverflow)?;
     if ln.is_negative {
-        return Err(FloatingOddsExchangeError::ArithmeticOverflow.into());
+        return Err(MathError::ArithmeticOverflow);
     }
 
     let ln_term = UnsignedNumeric::new(supply_other_u).safe_mul(ln.value)?;
@@ -65,9 +81,9 @@ pub fn quote_exact_output(
     let cost_fp = integral.safe_mul(UnsignedNumeric::new(precision_u))?;
     let cost = cost_fp
         .ceiling()
-        .ok_or(FloatingOddsExchangeError::ArithmeticOverflow)?
+        .ok_or(MathError::ArithmeticOverflow)?
         .to_imprecise()
-        .ok_or(FloatingOddsExchangeError::ArithmeticOverflow)?;
+        .ok_or(MathError::ArithmeticOverflow)?;
 
     Ok(cost.safe_to_u64()?)
 }
@@ -87,9 +103,9 @@ pub fn quote_exact_input(
     supply_other: u64,
     estimated_cost: u64,
     precision: u64,
-) -> Result<(u64, u64), ProgramError> {
+) -> Result<(u64, u64), MathError> {
     if estimated_cost == 0 {
-        return Err(FloatingOddsExchangeError::InvalidAmount.into());
+        return Err(MathError::InvalidAmount);
     }
 
     let precision_u = precision as u128;
@@ -131,7 +147,7 @@ pub fn quote_exact_input(
     }
 
     if best_amount == 0 {
-        return Err(FloatingOddsExchangeError::InsufficientLiquidity.into());
+        return Err(MathError::InsufficientLiquidity);
     }
 
     Ok((best_amount, best_cost))
@@ -139,7 +155,7 @@ pub fn quote_exact_input(
 
 /// `ceil(pot_amount * fee_bps / 10_000)`.
 #[inline(always)]
-pub fn fee_from_pot(pot_amount: u64, fee_bps: u16) -> Result<u64, ProgramError> {
+pub fn fee_from_pot(pot_amount: u64, fee_bps: u16) -> Result<u64, MathError> {
     let denom = BasisPoints::MAX as u128;
     let numer = (pot_amount as u128).safe_mul(u128::from(BasisPoints::new(fee_bps)?))?;
     // `ceil(n / d) = (n + d - 1) / d` for unsigned integers.
@@ -154,12 +170,12 @@ pub fn claims_from_pot(
     mint_amount: u64,
     mint_supply: u64,
     pot_amount: u64,
-) -> Result<u64, ProgramError> {
+) -> Result<u64, MathError> {
     if mint_amount == 0 {
-        return Err(FloatingOddsExchangeError::InvalidAmount.into());
+        return Err(MathError::InvalidAmount);
     }
     if mint_supply == 0 {
-        return Err(FloatingOddsExchangeError::InsufficientLiquidity.into());
+        return Err(MathError::InsufficientLiquidity);
     }
 
     let winnings = (pot_amount as u128)
@@ -167,4 +183,33 @@ pub fn claims_from_pot(
         .safe_div(mint_supply as u128)?;
 
     Ok(winnings.safe_to_u64()?)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn rejects_zero_quote_amounts() {
+        assert_eq!(
+            quote_exact_output(1, 1, 0, 1),
+            Err(MathError::InvalidAmount)
+        );
+        assert_eq!(quote_exact_input(1, 1, 0, 1), Err(MathError::InvalidAmount));
+    }
+
+    #[test]
+    fn exact_output_costs_full_price_without_opposite_supply() {
+        assert_eq!(quote_exact_output(1, 0, 2, 10), Ok(20));
+    }
+
+    #[test]
+    fn fee_rounds_up() {
+        assert_eq!(fee_from_pot(101, 100), Ok(2));
+    }
+
+    #[test]
+    fn claims_are_proportional_to_supply() {
+        assert_eq!(claims_from_pot(2, 4, 100), Ok(50));
+    }
 }

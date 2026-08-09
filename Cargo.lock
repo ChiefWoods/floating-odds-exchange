@@ -56,7 +56,7 @@ dependencies = [
  "solana-sysvar",
  "solana-sysvar-id",
  "solana-transaction-context",
- "thiserror 2.0.19",
+ "thiserror 2.0.20",
 ]
 
 [[package]]
@@ -384,7 +384,7 @@ checksum = "57e6189da6e6773ccdda3207259c4d6b63bb18ac7fde5ebe1a9b7f9a051c7b0d"
 dependencies = [
  "bytemuck",
  "quasar-lang 0.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "thiserror 2.0.19",
+ "thiserror 2.0.20",
 ]
 
 [[package]]
@@ -520,9 +520,9 @@ checksum = "fc652a48c352aef3ea3aed32080501cf3ef6ed5da78602a020c991775b0aff04"
 
 [[package]]
 name = "cc"
-version = "1.4.0"
+version = "1.4.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5add81bb678e6cb321aff7fa0dc7689ad82b112dbc032cea19f91d6b8e3582b9"
+checksum = "5d262e149917187838d5b42777c8253bcb64500067342904e7d429499a6f277e"
 dependencies = [
  "find-msvc-tools",
  "shlex",
@@ -853,9 +853,9 @@ checksum = "28dea519a9695b9977216879a3ebfddf92f1c08c05d984f8996aecd6ecdc811d"
 
 [[package]]
 name = "find-msvc-tools"
-version = "0.1.9"
+version = "0.1.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5baebc0774151f905a1a2cc41989300b1e6fbb29aff0ceffa1064fdd3088d582"
+checksum = "26b73573e6edcd2af0cdf47bd6cb58f0b3839491263c314eaad1ccf24430e1de"
 
 [[package]]
 name = "five8"
@@ -886,7 +886,7 @@ name = "floating-odds-exchange"
 version = "0.1.0"
 dependencies = [
  "basis-points",
- "brine-fp",
+ "floating-odds-exchange-math",
  "floating_odds_exchange-client",
  "quasar-lang 0.0.0 (git+https://github.com/blueshift-gg/quasar?branch=master)",
  "quasar-metadata",
@@ -899,6 +899,15 @@ dependencies = [
  "solana-program-pack",
  "wincode",
  "zeropod",
+]
+
+[[package]]
+name = "floating-odds-exchange-math"
+version = "0.1.0"
+dependencies = [
+ "basis-points",
+ "brine-fp",
+ "solana-math",
 ]
 
 [[package]]
@@ -2002,7 +2011,7 @@ dependencies = [
  "ark-serialize 0.5.0",
  "bytemuck",
  "solana-define-syscall 5.2.0",
- "thiserror 2.0.19",
+ "thiserror 2.0.20",
 ]
 
 [[package]]
@@ -2050,7 +2059,7 @@ dependencies = [
 [[package]]
 name = "solana-compiler-builtins"
 version = "0.1.0"
-source = "git+https://github.com/blueshift-gg/solana-compiler-builtins#a3a3b65d4de4ed9efc41b52c361108c7bba4dd2c"
+source = "git+https://github.com/blueshift-gg/solana-compiler-builtins#fd7ac4a977ca6f7deaa3e3aa0ae83a4f25f2a5e0"
 
 [[package]]
 name = "solana-compute-budget"
@@ -2087,7 +2096,7 @@ dependencies = [
  "curve25519-dalek",
  "solana-define-syscall 3.0.0",
  "subtle",
- "thiserror 2.0.19",
+ "thiserror 2.0.20",
 ]
 
 [[package]]
@@ -2178,9 +2187,9 @@ dependencies = [
 
 [[package]]
 name = "solana-instruction"
-version = "3.4.0"
+version = "3.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "37ebb0ffd19263051bc3f683fcc086134b8ff23af894dcb63f7563c7137b42f1"
+checksum = "a3957ca1d31107efd9a6bb88b25c348ca5e3b4b6683e3d08adb86d3d17aa01f1"
 dependencies = [
  "bincode",
  "serde",
@@ -2192,9 +2201,9 @@ dependencies = [
 
 [[package]]
 name = "solana-instruction-error"
-version = "2.5.0"
+version = "2.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e8e7db78c122d02189619490b1fef04a2a042c389662920617c0e6381fdf8fdd"
+checksum = "3b7d34343838343a3755b7dfb1e438d94c6db2263b519cfe3c2257af932b6e93"
 dependencies = [
  "num-traits",
  "solana-program-error",
@@ -2291,7 +2300,7 @@ dependencies = [
  "basis-points",
  "brine-fp",
  "quasar-lang 0.0.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "thiserror 2.0.19",
+ "thiserror 2.0.20",
  "zeropod",
 ]
 
@@ -2365,7 +2374,7 @@ dependencies = [
  "light-poseidon 0.2.0",
  "light-poseidon 0.4.0",
  "solana-define-syscall 3.0.0",
- "thiserror 2.0.19",
+ "thiserror 2.0.20",
 ]
 
 [[package]]
@@ -2482,7 +2491,7 @@ dependencies = [
  "solana-sysvar",
  "solana-sysvar-id",
  "solana-transaction-context",
- "thiserror 2.0.19",
+ "thiserror 2.0.20",
 ]
 
 [[package]]
@@ -2535,7 +2544,7 @@ dependencies = [
  "log",
  "rand 0.8.7",
  "rustc-demangle",
- "thiserror 2.0.19",
+ "thiserror 2.0.20",
  "winapi",
 ]
 
@@ -2568,7 +2577,7 @@ checksum = "ce0d2e8d53946f04e789476d6c407e4997b7fb412483df5fc10c075c65cb2edf"
 dependencies = [
  "k256",
  "solana-define-syscall 5.2.0",
- "thiserror 2.0.19",
+ "thiserror 2.0.20",
 ]
 
 [[package]]
@@ -2845,9 +2854,9 @@ dependencies = [
 
 [[package]]
 name = "solana-transaction-error"
-version = "3.4.0"
+version = "3.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8a37cf28c58b03878d38c38411f0414d3a99a9e3b7e5ebb0f83f3317b2796d18"
+checksum = "054e54d15164b0c34cb744600a1a0330e9fd97a12d979f2eb95904c807a07713"
 dependencies = [
  "solana-instruction-error",
  "solana-sanitize",
@@ -2888,7 +2897,7 @@ dependencies = [
  "solana-sdk-ids",
  "solana-sysvar",
  "spl-token-interface",
- "thiserror 2.0.19",
+ "thiserror 2.0.20",
 ]
 
 [[package]]
@@ -2908,7 +2917,7 @@ dependencies = [
  "solana-program-pack",
  "solana-pubkey 3.0.0",
  "solana-sdk-ids",
- "thiserror 2.0.19",
+ "thiserror 2.0.20",
 ]
 
 [[package]]
@@ -2973,11 +2982,11 @@ dependencies = [
 
 [[package]]
 name = "thiserror"
-version = "2.0.19"
+version = "2.0.20"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "09a43598840e33d5b0331f38c5e30d13bb11c11210a4b58f0d9b18a5a5eefcd9"
+checksum = "ec86235f5fcc2a73650310756d2ac5b138a5780bbbdfae3eeccec992c435ba4f"
 dependencies = [
- "thiserror-impl 2.0.19",
+ "thiserror-impl 2.0.20",
 ]
 
 [[package]]
@@ -2993,9 +3002,9 @@ dependencies = [
 
 [[package]]
 name = "thiserror-impl"
-version = "2.0.19"
+version = "2.0.20"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "43cbfe0cf76104d42a574802844187e84a305e531ed54455f11fbde0f10541cd"
+checksum = "bc04cd3e1236dd4a98afca4569f2deb3f120e5422a4023be2cb683f8486292af"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -3144,7 +3153,7 @@ dependencies = [
  "pastey",
  "proc-macro2",
  "quote",
- "thiserror 2.0.19",
+ "thiserror 2.0.20",
  "wincode-derive",
 ]
 

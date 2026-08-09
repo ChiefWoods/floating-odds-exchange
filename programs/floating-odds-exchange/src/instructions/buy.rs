@@ -1,10 +1,10 @@
+use floating_odds_exchange_math::{quote_exact_input, quote_exact_output};
 use quasar_lang::{cpi::Seed, prelude::*, sysvars::Sysvar};
 use quasar_spl::prelude::*;
 
 use crate::{
     errors::FloatingOddsExchangeError,
     events::BetCreated,
-    math::{quote_exact_input, quote_exact_output},
     state::{Market, MintN, MintY, Outcome},
     EventAuthority, FloatingOddsExchange,
 };
@@ -97,7 +97,8 @@ impl Buy {
 
         let (quoted_in_amount, quoted_out_amount) = if exact_in {
             let (quoted_out, quoted_in) =
-                quote_exact_input(supply_buy, supply_other, in_amount, market.precision())?;
+                quote_exact_input(supply_buy, supply_other, in_amount, market.precision())
+                    .map_err(FloatingOddsExchangeError::from)?;
             require!(
                 quoted_out >= amount_with_slippage,
                 FloatingOddsExchangeError::SlippageExceeded
@@ -105,7 +106,8 @@ impl Buy {
             (quoted_in, quoted_out)
         } else {
             let quoted_in =
-                quote_exact_output(supply_buy, supply_other, out_amount, market.precision())?;
+                quote_exact_output(supply_buy, supply_other, out_amount, market.precision())
+                    .map_err(FloatingOddsExchangeError::from)?;
             require!(
                 quoted_in <= amount_with_slippage,
                 FloatingOddsExchangeError::SlippageExceeded

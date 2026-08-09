@@ -1,10 +1,10 @@
+use floating_odds_exchange_math::fee_from_pot;
 use quasar_lang::{cpi::Seed, prelude::*, sysvars::Sysvar};
 use quasar_spl::prelude::*;
 
 use crate::{
     errors::FloatingOddsExchangeError,
     events::MarketResolved,
-    math::fee_from_pot,
     state::{Market, Outcome},
     EventAuthority, FloatingOddsExchange,
 };
@@ -132,7 +132,8 @@ impl Resolve {
         }
 
         if outcome != Outcome::Refunded {
-            let fee_amount = fee_from_pot(self.pot.amount(), market.fee_bps())?;
+            let fee_amount = fee_from_pot(self.pot.amount(), market.fee_bps())
+                .map_err(FloatingOddsExchangeError::from)?;
 
             let market_seed: u64 = market.seed.into();
             let market_seed_bytes = market_seed.to_le_bytes();

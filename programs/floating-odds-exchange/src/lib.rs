@@ -7,12 +7,11 @@ mod constants;
 mod errors;
 mod events;
 mod instructions;
-mod math;
 mod state;
 use constants::{NAME_MAX_LEN, SYMBOL_MAX_LEN, URI_MAX_LEN};
 use instructions::*;
 
-declare_id!("5pnZaYWVefsLgenmuseF8apDUZjjV1teJ6k1hNSYYANB");
+declare_id!("JDLx5QurZhzV5bVVwEm77b5bQdG74m4oALwqzYbNmBs");
 
 #[program]
 mod floating_odds_exchange {
