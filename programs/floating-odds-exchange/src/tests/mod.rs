@@ -1,7 +1,7 @@
 extern crate std;
 
 mod errors;
-mod lifecycle;
+mod instructions;
 
 use {
     alloc::vec,
