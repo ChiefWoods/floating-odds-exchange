@@ -43,6 +43,14 @@ quasar keys sync
 
 3. Build the program
 
+On the first build, run:
+
+```sh
+sh build-without-stub.sh
+```
+
+After that, build normally from `programs/floating-odds-exchange`:
+
 ```sh
 quasar build
 ```
@@ -52,6 +60,7 @@ quasar build
 Run all tests.
 
 ```sh
+cd programs/floating-odds-exchange
 quasar test
 ```
 
