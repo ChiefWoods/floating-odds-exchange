@@ -17,9 +17,6 @@ declare_id!("JDLx5QurZhzV5bVVwEm77b5bQdG74m4oALwqzYbNmBs");
 mod floating_odds_exchange {
     use super::*;
 
-    /// Quasar requires fixed args before dynamic `String` args, so `fee_bps`
-    /// precedes metadata strings (recovered Anchor order was seed, symbol, name,
-    /// uri, fee_bps).
     #[instruction(discriminator = 0)]
     pub fn initialize(
         ctx: Ctx<Initialize>,
@@ -38,9 +35,6 @@ mod floating_odds_exchange {
         ctx.accounts.handler(amount_y, amount_n)
     }
 
-    /// Exact-in: quote with `in_amount`, require out >= `amount_with_slippage`.
-    /// Exact-out: quote with `out_amount`, require in <= `amount_with_slippage`.
-    /// Side is inferred from `buy_mint` (must be the market YES or NO mint).
     #[instruction(discriminator = 2)]
     pub fn buy(
         ctx: Ctx<Buy>,
@@ -53,9 +47,6 @@ mod floating_odds_exchange {
             .handler(in_amount, out_amount, exact_in, amount_with_slippage)
     }
 
-    /// Post-resolution only: full winning-side redeem (Yes/No), or pro-rata
-    /// pot refund across YES+NO when the market was resolved undecided
-    /// (`Outcome::Refunded`).
     #[instruction(discriminator = 3)]
     pub fn claim(ctx: Ctx<Claim>) -> Result<(), ProgramError> {
         ctx.accounts.handler()

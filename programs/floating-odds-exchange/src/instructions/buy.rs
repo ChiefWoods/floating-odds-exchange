@@ -25,11 +25,9 @@ pub struct Buy {
 
     pub pot_mint: InterfaceAccount<Mint>,
 
-    /// Outcome mint being purchased (market YES or NO PDA).
     #[account(mut)]
     pub buy_mint: Account<Mint>,
 
-    /// Opposite outcome mint (the other of YES/NO).
     #[account(mut)]
     pub other_mint: Account<Mint>,
 

@@ -7,10 +7,7 @@ use crate::errors::FloatingOddsExchangeError;
 pub enum Outcome {
     Yes = 0,
     No = 1,
-    /// Market not yet resolved.
     Undecided = 2,
-    /// Resolved as undecided/void: pot split equally across all Y+N holders,
-    /// no protocol fee (whitepaper refund rule).
     Refunded = 3,
 }
 
@@ -48,7 +45,6 @@ pub struct MintY;
 #[seeds(b"mint_n", market: Address)]
 pub struct MintN;
 
-/// Market account.
 #[account(discriminator = 1, set_inner)]
 #[seeds(b"market", authority: Address, seed: u64)]
 pub struct Market {
