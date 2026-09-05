@@ -22,9 +22,9 @@ mod floating_odds_exchange {
         ctx: Ctx<Initialize>,
         seed: u64,
         fee_bps: u16,
-        name: String<{ NAME_MAX_LEN }>,
-        symbol: String<{ SYMBOL_MAX_LEN }>,
-        uri: String<{ URI_MAX_LEN }>,
+        name: String<NAME_MAX_LEN>,
+        symbol: String<SYMBOL_MAX_LEN>,
+        uri: String<URI_MAX_LEN>,
     ) -> Result<(), ProgramError> {
         ctx.accounts
             .handler(&ctx.bumps, seed, fee_bps, name, symbol, uri)
